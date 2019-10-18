@@ -1,0 +1,3 @@
+[submodule "libqvk"]
+	path = libqvk
+	url = https://github.com/virus-on/libqvk.git

@@ -1,4 +1,4 @@
-QT += quick core network
+QT += quick quickcontrols2
 CONFIG += c++14
 
 # The following define makes your compiler emit warnings if you use
@@ -14,8 +14,9 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
         main.cpp \
+    controller.cpp \
     vkUserModel.cpp \
-    controller.cpp
+
 
 INCLUDEPATH += $$PWD/../libqvk/src
 
@@ -35,5 +36,6 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 HEADERS += \
+    controller.h \
     vkUserModel.h \
-    controller.h
+

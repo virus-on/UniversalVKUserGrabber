@@ -2,5 +2,7 @@
     <qresource prefix="/">
         <file>main.qml</file>
         <file>qtquickcontrols2.conf</file>
+        <file>TTextEdit.qml</file>
+        <file>TActionMenu.qml</file>
     </qresource>
 </RCC>

@@ -1,6 +1,9 @@
 #include "controller.h"
 
 
+namespace App
+{
+
 Controller::Controller(VkUserModel& model, QObject *parent)
     : QObject(parent)
     , model_(model)
@@ -28,7 +31,7 @@ bool Controller::getLikes(const QString &url)
 
                 int offset = 0;
                 int likesCount = 0;
-                QList<User> users;
+                std::list<User> users;
                 do
                 {
                     QJsonObject response = api_->call("likes.getList", {
@@ -36,7 +39,6 @@ bool Controller::getLikes(const QString &url)
                                                        {"offset",   QString::number(offset)},
                                                        {"owner_id", groupId},
                                                        {"item_id",  postId},
-                                                       {"extended", "1"},
                                                        {"count",    "1000"}
                                                    });
                     offset += 1000;
@@ -68,7 +70,7 @@ bool Controller::getLikes(const QString &url)
                             if (userObj.contains("first_name") && userObj.contains("last_name"))
                                 user.fullName = getValue<QString>(userObj, "first_name") + " " + getValue<QString>(userObj, "last_name");
                             if (userObj.contains("id"))
-                                user.id = getValue<size_t>(userObj, "id");
+                                user.id = getValue<int>(userObj, "id");
                             if (userObj.contains("city") && userObj["city"].toObject().contains("title"))
                                 user.cityName = getValue<QString>(getValue<jsonObject>(userObj, "city"), "title");
                             if (userObj.contains("home_town"))
@@ -85,6 +87,7 @@ bool Controller::getLikes(const QString &url)
                     }
                 }
                 while (offset < likesCount);
+                model_.setUsers(users);
                 return true;
             }
         }
@@ -92,7 +95,15 @@ bool Controller::getLikes(const QString &url)
     return false;
 }
 
-void Controller::setFilter(const QString &gender, const Controller::sortType &sortBy, const QString &cityName)
+void Controller::setFiltersAndAddUsers(int gender, int sortBy, const QString &cityName)
 {
-
+    model_.setFilters(gender, SortType(sortBy), cityName);
+    model_.addUsersToModel();
 }
+
+void Controller::closeApp()
+{
+    exit(0);
+}
+
+} // App

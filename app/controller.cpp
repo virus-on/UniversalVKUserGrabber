@@ -95,9 +95,15 @@ bool Controller::getLikes(const QString &url)
     return false;
 }
 
-void Controller::setFiltersAndAddUsers(int gender, int sortBy, const QString &cityName)
+void Controller::setFiltersAndAddUsers(int gender, int sortBy, const QString &cityNames)
 {
-    model_.setFilters(gender, SortType(sortBy), cityName);
+    QStringList rawCityToFilter = cityNames.split(",", QString::SkipEmptyParts);
+    QStringList cityToFilter;
+
+    for (const auto& city: rawCityToFilter)
+        cityToFilter.push_back(city.simplified());
+
+    model_.setFilters(gender, SortType(sortBy), cityToFilter);
     model_.addUsersToModel();
 }
 

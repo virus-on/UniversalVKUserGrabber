@@ -35,7 +35,7 @@ public:
     };
 
     VkUserModel(QObject *parent = nullptr);
-    void setFilters(int gender = -1, const SortType& sortBy = SortType::ByName, const QString& cityName = "");
+    void setFilters(int gender = -1, const SortType& sortBy = SortType::ByName, const QStringList& cityNames = {});
     void setUsers(const std::list<User>& users);
     void addUsersToModel();
     void resetModel();
@@ -49,10 +49,10 @@ protected:
 
 
 protected:
-    std::list<User>     allUsers_;
-    QList<User>         modelData_;
+    std::list<User>allUsers_;
+    QList<User>     modelData_;
     SortType        sortType_;
-    QString         cityNameFilter_;
+    QStringList     cityNameFilter_;
     int             genderFilter_;
 };
 

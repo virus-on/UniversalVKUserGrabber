@@ -18,7 +18,7 @@ public:
     explicit Controller(VkUserModel& model, QObject *parent = nullptr);
     Q_INVOKABLE bool auth(const QString& login, const QString& password);
     Q_INVOKABLE bool getLikes(const QString& url);
-    Q_INVOKABLE void setFiltersAndAddUsers(int gender = -1, int sortBy = 0, const QString& cityName = "");
+    Q_INVOKABLE void setFiltersAndAddUsers(int gender = -1, int sortBy = 0, const QString& cityNames = "");
     Q_INVOKABLE void closeApp();
 
 private:

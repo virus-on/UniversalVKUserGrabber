@@ -1,16 +1,17 @@
 #include "vkUserModel.h"
 
+
 namespace App
 {
 
 VkUserModel::VkUserModel(QObject *parent)
     : QAbstractListModel(parent)
     , sortType_(SortType::ByName)
-    , cityNameFilter_("")
+    , cityNameFilter_({})
     , genderFilter_(-1)
 {}
 
-void VkUserModel::setFilters(int gender, const SortType &sortBy, const QString &cityName)
+void VkUserModel::setFilters(int gender, const SortType &sortBy, const QStringList &cityName)
 {
     genderFilter_   = gender;
     sortType_       = sortBy;
@@ -45,13 +46,25 @@ void VkUserModel::addUsersToModel()
         });
     }
 
-
     for (const auto& user: allUsers_)
     {
         if (genderFilter_ != -1 && user.sex != genderFilter_)
             continue;
-        if (!cityNameFilter_.isEmpty() && (!user.cityName.contains(cityNameFilter_) && !user.homeTown.contains(cityNameFilter_)))
-            continue;
+
+        if (!cityNameFilter_.isEmpty())
+        {
+            bool skipThis = true;
+            for (const auto& filter: cityNameFilter_)
+            {
+                if (user.cityName.contains(filter) || user.homeTown.contains(filter))
+                {
+                    skipThis = false;
+                    break;
+                }
+            }
+            if (skipThis)
+                continue;
+        }
         beginInsertRows(QModelIndex(), rowCount(), rowCount());
         modelData_.push_back(user);
         endInsertRows();

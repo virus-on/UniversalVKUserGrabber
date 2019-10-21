@@ -1,5 +1,7 @@
 #include "controller.h"
 
+#include <QFile>
+
 
 namespace App
 {
@@ -8,12 +10,16 @@ Controller::Controller(VkUserModel& model, QObject *parent)
     : QObject(parent)
     , model_(model)
 {
-    api_ = std::make_unique<VK::Client>();
+    api_ = std::make_unique<VK::Client>("5.65", "ru");
 }
 
 bool Controller::auth(const QString &login, const QString &password)
 {
-    return api_->auth(login, password);
+    bool authResult = api_->auth(login, password);
+
+    if (authResult)
+        saveApiToken(api_->access_token());
+    return authResult;
 }
 
 bool Controller::getLikes(const QString &url)
@@ -110,6 +116,38 @@ void Controller::setFiltersAndAddUsers(int gender, int sortBy, const QString &ci
 void Controller::closeApp()
 {
     exit(0);
+}
+
+bool Controller::tryAutologin()
+{
+    return api_->auth("", "", loadApiToken());
+}
+
+QString Controller::getUsername()
+{
+    return api_->first_name();
+}
+
+void Controller::saveApiToken(const QString& token)
+{
+    QFile tokenFile("vk_token");
+
+    if (tokenFile.open(QIODevice::WriteOnly | QIODevice::Truncate))
+    {
+        tokenFile.write(token.toUtf8());
+        tokenFile.close();
+    }
+}
+
+QString Controller::loadApiToken()
+{
+    QFile tokenFile("vk_token");
+
+    if (tokenFile.open(QIODevice::ReadOnly))
+    {
+        return tokenFile.readLine().simplified();
+    }
+    return QString();
 }
 
 } // App

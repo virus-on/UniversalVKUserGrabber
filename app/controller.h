@@ -20,6 +20,12 @@ public:
     Q_INVOKABLE bool getLikes(const QString& url);
     Q_INVOKABLE void setFiltersAndAddUsers(int gender = -1, int sortBy = 0, const QString& cityNames = "");
     Q_INVOKABLE void closeApp();
+    Q_INVOKABLE bool tryAutologin();
+    Q_INVOKABLE QString getUsername();
+
+private:
+    void saveApiToken(const QString& token);
+    QString loadApiToken();
 
 private:
     std::unique_ptr<VK::Client> api_;

@@ -18,6 +18,7 @@ Rectangle {
         anchors.verticalCenter: parent.verticalCenter
         anchors.leftMargin: 12
         anchors.rightMargin: 12
+        inputMethodHints: Qt.ImhNoPredictiveText
 
         id: txtEdit
         wrapMode: TextEdit.NoWrap

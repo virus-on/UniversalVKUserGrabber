@@ -14,6 +14,25 @@ ApplicationWindow {
     property string currentMenu: loginMenu.menuName
     property alias  headerText: actionMenu.text
 
+    function showToolTip(text, time){
+        tip.timeout = time;
+        tip.text = text;
+        tip.visible = true;
+    }
+
+    ToolTip {
+        id: tip
+        delay: 500
+        timeout: 2000
+        background: Rectangle {
+            color: "black"
+            radius: 15
+        }
+        font.pointSize: 16
+        x: (parent.width - width) / 2
+        y: (parent.height - 100)
+    }
+
     header: TActionMenu {
         id: actionMenu
         threeDotsMenuVisible: true
@@ -71,6 +90,16 @@ ApplicationWindow {
             }
         }
 
+        Component.onCompleted: {
+            loginMenu.enabled = false;
+            if (cppController.tryAutologin())
+            {
+                currentMenu = linkMenu.menuName
+                showToolTip("Welcome back, " + cppController.getUsername(), 3000);
+            }
+            loginMenu.enabled = true;
+        }
+
         ColumnLayout {
             spacing: 8
 
@@ -120,7 +149,10 @@ ApplicationWindow {
                     loginMenu.enabled = false;
 
                     if (cppController.auth(loginTextEdit.text, passwordTextEdit.text))
+                    {
                         currentMenu = linkMenu.menuName
+                        showToolTip("Hello, " + cppController.getUsername(), 3000);
+                    }
                     loginMenu.enabled = true;
                 }
             }
@@ -350,12 +382,14 @@ ApplicationWindow {
             width: parent.width
             model: userListModel
             delegate: ItemDelegate {
-                text: NameRole + ": " + (SexRole == 1 ? "F" : "M") + " " + CityRole + " " + HomeTownRole
+                text: NameRole + ": " + CityRole + " " + HomeTownRole
                 width: parent.width
                 font.pointSize: 14
+                icon.source: (SexRole == 1 ? "qrc:/img/female_icon.png" : "qrc:/img/male_icon.png")
+                icon.width: 24
+                icon.height: 24
                 onClicked: {
                     var url = "https://vk.com/id" + IdRole;
-                    console.log(url);
                     Qt.openUrlExternally(url)
                 }
             }

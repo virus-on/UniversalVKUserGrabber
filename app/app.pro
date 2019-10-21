@@ -1,4 +1,4 @@
-QT += quick quickcontrols2
+QT += quick quickcontrols2 qml core network
 CONFIG += c++14
 
 # The following define makes your compiler emit warnings if you use
@@ -24,6 +24,8 @@ LIBS += -L$$OUT_PWD/../libqvk -lqvk
 
 RESOURCES += qml.qrc
 
+include(../android_openssl/openssl.pri)
+
 # Additional import path used to resolve QML modules in Qt Creator's code model
 QML_IMPORT_PATH =
 
@@ -38,4 +40,8 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 HEADERS += \
     controller.h \
     vkUserModel.h \
+
+DISTFILES += \
+    img/female_icon.png \
+    img/male_icon.png
 

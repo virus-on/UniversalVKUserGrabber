@@ -4,5 +4,7 @@
         <file>qtquickcontrols2.conf</file>
         <file>TTextEdit.qml</file>
         <file>TActionMenu.qml</file>
+        <file>img/female_icon.png</file>
+        <file>img/male_icon.png</file>
     </qresource>
 </RCC>

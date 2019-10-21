@@ -17,6 +17,7 @@ int main(int argc, char *argv[])
 
     App::VkUserModel model;
     App::Controller  ctrl(model);
+    qDebug() << QSslSocket::supportsSsl() << QSslSocket::sslLibraryBuildVersionString() << QSslSocket::sslLibraryVersionString();
 
 //    model.setUsers({
 //                       App::User({"Kkk Kkk", 1, 2, "kkk", "qqq"}),

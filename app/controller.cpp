@@ -10,7 +10,9 @@ Controller::Controller(VkUserModel& model, QObject *parent)
     : QObject(parent)
     , model_(model)
 {
-    api_ = std::make_unique<VK::Client>("5.65", "ru");
+    api_ = std::make_unique<VK::Client>("5.65", "ru",
+                                        [this](const QString& id){ return enterCaptcha(id); },
+                                        [this](){ return enterSMSCode(); });
 }
 
 bool Controller::auth(const QString &login, const QString &password)
@@ -148,6 +150,16 @@ QString Controller::loadApiToken()
         return tokenFile.readLine().simplified();
     }
     return QString();
+}
+
+QString Controller::enterCaptcha(const QString &id)
+{
+    return "";
+}
+
+QString Controller::enterSMSCode()
+{
+    return "";
 }
 
 } // App

@@ -49,7 +49,7 @@ protected:
 
 
 protected:
-    std::list<User>allUsers_;
+    std::list<User> allUsers_;
     QList<User>     modelData_;
     SortType        sortType_;
     QStringList     cityNameFilter_;

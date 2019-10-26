@@ -9,10 +9,34 @@ ApplicationWindow {
     visible: true
     width: 480
     height: 640
+    minimumHeight: 640
+    minimumWidth: 480
     title: qsTr("VK LIKE GRABBER")
 
     property string currentMenu: loginMenu.menuName
     property alias  headerText: actionMenu.text
+
+    function lockMenuOnVisibleChangeState(menuName)
+    {
+        if (menuName === loginMenu.menuName)
+            loginMenu.isLocked = true;
+        else if (menuName === linkMenu.menuName)
+            linkMenu.isLocked = true;
+        else if (menuName === filtersMenu.menuName)
+            filtersMenu.isLocked = true;
+        else if (menuName === userSelectionMenu.menuName)
+            userSelectionMenu.isLocked = true;
+        else
+            console.log("Unhandled lock!");
+    }
+
+    function goToInput(imgUrl)
+    {
+        captchaImage.source = imgUrl;
+        lockMenuOnVisibleChangeState(root.currentMenu);
+        inputMenu.prevMenu = root.currentMenu;
+        root.currentMenu = inputMenu.menuName;
+    }
 
     function showToolTip(text, time){
         tip.timeout = time;
@@ -77,6 +101,7 @@ ApplicationWindow {
     Item {
         id: loginMenu
         property string menuName: "LOGIN_MENU"
+        property bool isLocked: false
         visible: currentMenu == menuName
         anchors.fill: parent
         anchors.topMargin: -10
@@ -85,8 +110,11 @@ ApplicationWindow {
             if (visible)
             {
                 headerText = "Sign in"
-                loginMenu.enabled = true
                 actionMenu.showWholeMenu = false
+                if (!isLocked)
+                    loginMenu.enabled = true
+                else
+                    isLocked = false;
             }
         }
 
@@ -164,6 +192,7 @@ ApplicationWindow {
     Item {
         id: linkMenu
         property string menuName: "LINK_INPUT_MENU"
+        property bool isLocked: false
         visible: currentMenu == menuName
         anchors.fill: parent
         anchors.topMargin: -10
@@ -172,8 +201,11 @@ ApplicationWindow {
             if (visible)
             {
                 headerText = "Input link to post"
-                linkMenu.enabled = true
                 actionMenu.showWholeMenu = false
+                if (!isLocked)
+                    linkMenu.enabled = true
+                else
+                    isLocked = false;
             }
         }
 
@@ -221,6 +253,7 @@ ApplicationWindow {
     ColumnLayout {
         id: filtersMenu
         property string menuName: "FILTERS_MENU"
+        property bool isLocked: false
         visible: currentMenu == menuName
         anchors.top: parent.top
         anchors.left: parent.left
@@ -230,8 +263,11 @@ ApplicationWindow {
             if (visible)
             {
                 headerText = "Set filters"
-                filtersMenu.enabled = true
                 actionMenu.showWholeMenu = false
+                if (!isLocked)
+                    filtersMenu.enabled = true
+                else
+                    isLocked = false;
             }
         }
 
@@ -364,6 +400,7 @@ ApplicationWindow {
     ScrollView {
         id: userSelectionMenu
         property string menuName: "SELECTION_MENU"
+        property bool isLocked: false
         visible: currentMenu == menuName
         ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
         contentWidth: root.width
@@ -394,5 +431,63 @@ ApplicationWindow {
                 }
             }
         }
+    }
+
+    ColumnLayout {
+        id: inputMenu
+        property string menuName: "INPUT_MENU"
+        visible: currentMenu == menuName
+        anchors.left:   parent.left
+        anchors.right:  parent.right
+        anchors.top:    parent.top
+        anchors.margins: 20
+
+        property string prevMenu: ""
+
+        onVisibleChanged: {
+            if (visible)
+            {
+                headerText = "Input"
+                actionMenu.showWholeMenu = false
+            }
+        }
+
+        Image {
+            id: captchaImage
+            source: ""
+            Layout.alignment: Qt.AlignHCenter
+        }
+
+        Label {
+            id: codeLabel
+            padding: 12
+            text: "Input " + (captchaImage.source.length == 0 ? "Code from SMS" : "Captcha")
+            font.pointSize: 16
+            font.bold: true
+        }
+
+        TTextEdit {
+            id: captchaInput
+            Layout.fillWidth: true
+            height: 40
+            fontSize: 16
+            maximumLength: 30
+            wrapMode: TextEdit.NoWrap
+        }
+
+        Button {
+            id: enterCodeButton
+            Layout.alignment: Qt.AlignHCenter
+            text: "  Send  "
+            font.pointSize: 16
+            onClicked: {
+                cppController.code = captchaInput.text;
+                console.log(inputMenu.prevMenu, captchaInput.text);
+                captchaInput.text = "";
+
+                root.currentMenu = inputMenu.prevMenu;
+            }
+        }
+
     }
 }

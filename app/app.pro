@@ -20,6 +20,9 @@ SOURCES += \
 
 INCLUDEPATH += $$PWD/../libqvk/src
 
+win32 {
+    LIBS += -L$$OUT_PWD/../libqvk/debug
+}
 LIBS += -L$$OUT_PWD/../libqvk -lqvk
 
 RESOURCES += qml.qrc

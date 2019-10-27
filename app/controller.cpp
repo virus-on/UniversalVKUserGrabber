@@ -9,6 +9,7 @@ namespace App
 Controller::Controller(VkUserModel& model, QObject *parent)
     : QObject(parent)
     , model_(model)
+    , qmlHandleObject_(nullptr)
 {
     api_ = std::make_unique<VK::Client>("5.65", "ru",
                                         [this](const QString& id){ return enterCaptcha(id); },
@@ -130,6 +131,11 @@ QString Controller::getUsername()
     return api_->first_name();
 }
 
+void Controller::setQmlHandleObject(QObject *obj)
+{
+    qmlHandleObject_ = obj;
+}
+
 void Controller::saveApiToken(const QString& token)
 {
     QFile tokenFile("vk_token");
@@ -154,12 +160,41 @@ QString Controller::loadApiToken()
 
 QString Controller::enterCaptcha(const QString &id)
 {
-    return "";
+    qDebug() << "Enter captcha!";
+    if (qmlHandleObject_ == nullptr)
+    {
+        qCritical() << "No qmlHandleObject_ exiting!";
+        return "";
+    }
+
+//    QVariant url = "https://api.vk.com/captcha.php?sid=" + id;
+    QVariant url = id;
+    QMetaObject::invokeMethod(qmlHandleObject_, "goToInput",
+        Q_ARG(QVariant, url));
+
+    QEventLoop loop;
+    connect(&loop, &QEventLoop::quit, this, &Controller::codeChanged);
+    loop.exec();
+
+    return code_;
 }
 
 QString Controller::enterSMSCode()
 {
-    return "";
+    if (qmlHandleObject_ == nullptr)
+    {
+        qCritical() << "No qmlHandleObject_ exiting!";
+        return "";
+    }
+
+    QMetaObject::invokeMethod(qmlHandleObject_, "goToInput",
+        Q_ARG(QVariant, ""));
+
+    QEventLoop loop;
+    connect(this, &Controller::codeChanged, &loop, &QEventLoop::quit);
+    loop.exec();
+
+    return code_;
 }
 
 } // App

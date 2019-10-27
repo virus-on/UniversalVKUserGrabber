@@ -23,6 +23,7 @@ public:
     Q_INVOKABLE void closeApp();
     Q_INVOKABLE bool tryAutologin();
     Q_INVOKABLE QString getUsername();
+    void        setQmlHandleObject(QObject* obj);
 
 signals:
     void codeChanged();
@@ -38,6 +39,7 @@ private:
     std::unique_ptr<VK::Client> api_;
     VkUserModel&                model_;
     QString                     code_;
+    QObject*                    qmlHandleObject_;
 };
 
 } // App

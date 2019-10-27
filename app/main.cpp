@@ -23,11 +23,11 @@ int main(int argc, char *argv[])
     QQmlContext *ctxt = engine.rootContext();
     ctxt->setContextProperty("userListModel", &model);
     ctxt->setContextProperty("cppController", &ctrl);
-
     engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
+
     if (engine.rootObjects().isEmpty())
         return -1;
-
+    ctrl.setQmlHandleObject(engine.rootObjects()[0]);
 
     return app.exec();
 }

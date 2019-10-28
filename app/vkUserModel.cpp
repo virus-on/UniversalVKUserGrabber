@@ -56,7 +56,7 @@ void VkUserModel::addUsersToModel()
             bool skipThis = true;
             for (const auto& filter: cityNameFilter_)
             {
-                if (user.cityName.contains(filter) || user.homeTown.contains(filter))
+                if (user.cityName.contains(filter, Qt::CaseInsensitive) || user.homeTown.contains(filter, Qt::CaseInsensitive))
                 {
                     skipThis = false;
                     break;

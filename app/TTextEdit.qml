@@ -13,14 +13,17 @@ Rectangle {
     radius: 40
 
     TextInput {
+        id: txtEdit
+
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.verticalCenter: parent.verticalCenter
         anchors.leftMargin: 12
         anchors.rightMargin: 12
-        inputMethodHints: Qt.ImhNoPredictiveText
 
-        id: txtEdit
+        inputMethodHints: Qt.ImhNoPredictiveText | Qt.ImhNoAutoUppercase | Qt.ImhSensitiveData
+        echoMode: TextInput.Normal
         wrapMode: TextEdit.NoWrap
+        layer.enabled: true
     }
 }

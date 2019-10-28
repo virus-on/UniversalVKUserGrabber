@@ -106,7 +106,7 @@ bool Controller::getLikes(const QString &url)
 
 void Controller::setFiltersAndAddUsers(int gender, int sortBy, const QString &cityNames)
 {
-    QStringList rawCityToFilter = cityNames.split(",", QString::SkipEmptyParts);
+    QStringList rawCityToFilter = cityNames.simplified().split(",", QString::SkipEmptyParts);
     QStringList cityToFilter;
 
     for (const auto& city: rawCityToFilter)

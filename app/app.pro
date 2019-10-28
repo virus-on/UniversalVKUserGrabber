@@ -46,10 +46,16 @@ HEADERS += \
 
 DISTFILES += \
     android/AndroidManifest.xml \
+    android/AndroidManifest.xml \
+    android/build.gradle \
     android/build.gradle \
     android/gradle/wrapper/gradle-wrapper.jar \
+    android/gradle/wrapper/gradle-wrapper.jar \
+    android/gradle/wrapper/gradle-wrapper.properties \
     android/gradle/wrapper/gradle-wrapper.properties \
     android/gradlew \
+    android/gradlew \
+    android/gradlew.bat \
     android/gradlew.bat \
     android/res/mipmap-anydpi-v26/ic_launcher.xml \
     android/res/mipmap-anydpi-v26/ic_launcher_round.xml \

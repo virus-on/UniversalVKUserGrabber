@@ -15,11 +15,13 @@ Rectangle {
     TextInput {
         id: txtEdit
 
-        anchors.left: parent.left
-        anchors.right: parent.right
-        anchors.verticalCenter: parent.verticalCenter
-        anchors.leftMargin: 12
-        anchors.rightMargin: 12
+        anchors {
+            left: parent.left
+            right: parent.right
+            verticalCenter: parent.verticalCenter
+            leftMargin: 12
+            rightMargin: 12
+        }
 
         inputMethodHints: Qt.ImhNoPredictiveText | Qt.ImhNoAutoUppercase | Qt.ImhSensitiveData
         echoMode: TextInput.Normal

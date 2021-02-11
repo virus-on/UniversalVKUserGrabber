@@ -4,11 +4,13 @@ import QtQuick.Controls.Material 2.1
 
 ToolBar {
     id: root
-    height: 48
+
+    signal menuClicked()
+
     property alias  text: headerLabel.text
     property bool   threeDotsMenuVisible: false
 
-    signal menuClicked()
+    height: 48
 
     Rectangle {
         anchors.fill: parent
@@ -16,10 +18,11 @@ ToolBar {
 
         Text {
             id: headerLabel
+
             anchors {
                 verticalCenter: parent.verticalCenter
                 left: parent.left
-                leftMargin: 20 + 12
+                leftMargin: 32
             }
 
             text: "Sign in"
@@ -33,8 +36,10 @@ ToolBar {
                 right: parent.right
                 bottom: parent.bottom
             }
+
             visible: threeDotsMenuVisible
             text: qsTr("⋮")
+
             onClicked: root.menuClicked()
         }
     }

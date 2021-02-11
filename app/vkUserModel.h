@@ -40,11 +40,10 @@ public:
     void addUsersToModel();
     void resetModel();
 
+private:
     int         rowCount(const QModelIndex & parent = QModelIndex()) const;
     QVariant    data(const QModelIndex & index, int role = Qt::DisplayRole) const;
     bool        removeRows(int row, int count, const QModelIndex &parent = QModelIndex());
-
-protected:
     QHash<int, QByteArray> roleNames() const;
 
 
